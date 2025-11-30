@@ -15,7 +15,7 @@ CHANNEL_ID = -1003422300617
 MANUAL_CHANNEL_LINK = "https://t.me/+A0NALNA1tltjYjIy" 
 
 # Ссылка на основной канал (ЭТА ССЫЛКА БУДЕТ ИСПОЛЬЗОВАТЬСЯ ПРИНУДИТЕЛЬНО!)
-FALLBACK_CHANNEL_LINK = "https://t.me/+UCv7qEQLX-wxZDE6i"
+FALLBACK_CHANNEL_LINK = "https://t.me/+UCv7qEQLX-wxZDE6"
 
 # ID чата, где хранится сообщение с Premium-эмодзи
 # ВАЖНО: ЗАМЕНИТЕ ЭТИ ЗНАЧЕНИЯ НА ТЕ, ЧТО ВЫ ПОЛУЧИЛИ ОТ RAWDataBot
@@ -144,3 +144,4 @@ async def process_callback_check(callback_query: types.CallbackQuery):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
+
