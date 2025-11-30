@@ -15,9 +15,11 @@ CHANNEL_ID = -1003422300617
 MANUAL_CHANNEL_LINK = "https://t.me/+A0NALNA1tltjYjIy" 
 
 # Ссылка на основной канал (ЭТА ССЫЛКА БУДЕТ ИСПОЛЬЗОВАТЬСЯ ПРИНУДИТЕЛЬНО!)
-FALLBACK_CHANNEL_LINK = "https://t.me/+UCv7qEQLX-wxZDE6i"
+FALLBACK_CHANNEL_LINK = "https://t.me/+UCv7qEQLX-wxZDE6" # <--- ОБНОВЛЕНА
+# ----------------------------------------------------------------------
 
-# ID фото, которое будет отправляться в начале. (ВЗЯТО ИЗ ВАШЕГО JSON)
+# ID фото, которое будет отправляться в начале. (ВЗЯТО ИЗ ВАШЕГО НОВОГО JSON)
+# Если возникнут ошибки, вам потребуется получить новый file_id, отправив фото напрямую боту.
 PHOTO_FILE_ID = "AgACAgIAAxkBAAE-j_ZpK81Rtgm5SohtE1bMtI0XB_YHKQACCAtrG-zcYEn1PjRKletkuwEAAwIAA3kAAzYE" 
 # ----------------------------------------------------------------------
 
@@ -76,8 +78,8 @@ async def send_welcome(message: types.Message):
             caption="**САМЫЙ ЛУЧШИЙ ГАЙД НА OFM МОДЕЛИ**" # Подпись под фото
         )
     except Exception as e:
+        # Если фото не отправилось (Wrong file identifier), продолжаем без него.
         logging.error(f"Не удалось отправить фото {PHOTO_FILE_ID} пользователю {user_id}: {e}")
-        # Если фото не отправилось, продолжаем без него.
         
     # 2. Затем отправляем текст с кнопками (как обычно)
     if await is_subscribed(user_id):
