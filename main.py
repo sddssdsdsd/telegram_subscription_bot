@@ -15,13 +15,7 @@ CHANNEL_ID = -1003422300617
 MANUAL_CHANNEL_LINK = "https://t.me/+A0NALNA1tltjYjIy" 
 
 # Ссылка на основной канал (ЭТА ССЫЛКА БУДЕТ ИСПОЛЬЗОВАТЬСЯ ПРИНУДИТЕЛЬНО!)
-FALLBACK_CHANNEL_LINK = "https://t.me/+UCv7qEQLX-wxZDE6"
-
-# ID чата, где хранится сообщение с Premium-эмодзи
-# ВАЖНО: ЗАМЕНИТЕ ЭТИ ЗНАЧЕНИЯ НА ТЕ, ЧТО ВЫ ПОЛУЧИЛИ ОТ RAWDataBot
-SOURCE_CHAT_ID = -1009988776655  
-# ID сообщения, которое нужно переслать
-SUCCESS_MESSAGE_ID = 123
+FALLBACK_CHANNEL_LINK = "https://t.me/+UCv7qEQLX-wxZDE6i"
 # ----------------------------------------------------------------------
 
 # Настройка логирования
@@ -40,7 +34,7 @@ CHECK_BUTTON = types.InlineKeyboardMarkup().add(
     types.InlineKeyboardButton(text="✅ Я подписался, проверить доступ", callback_data="check_subscription")
 )
 
-# Клавиатура для ПОДПИСАННОГО пользователя (будет использоваться как резерв, если не удастся переслать)
+# Клавиатура для ПОДПИСАННОГО пользователя (Две кнопки со стандартными эмодзи)
 SUBSCRIBED_KEYBOARD = types.InlineKeyboardMarkup(row_width=1)
 SUBSCRIBED_KEYBOARD.add(
     types.InlineKeyboardButton(text="🚀 Перейти к мануалам", url=MANUAL_CHANNEL_LINK)
@@ -72,27 +66,16 @@ async def send_welcome(message: types.Message):
     user_id = message.from_user.id
     
     if await is_subscribed(user_id):
-        # Если подписан - ПЕРЕСЫЛАЕМ СООБЩЕНИЕ С ЭМОДЗИ
-        try:
-            await bot.forward_message(
-                chat_id=user_id,
-                from_chat_id=SOURCE_CHAT_ID,
-                message_id=SUCCESS_MESSAGE_ID
-            )
-        except Exception as e:
-            # Если пересылка не удалась, отправляем резервный текст с кнопками
-            logging.error(f"Failed to forward message: {e}")
-            await message.answer(
-                "✅ **Доступ открыт!** Но не удалось переслать сообщение с эмодзи. "
-                "Пожалуйста, используйте кнопки ниже:",
-                reply_markup=SUBSCRIBED_KEYBOARD 
-            )
+        # Если подписан - отправляем сообщение с двумя стандартными кнопками
+        await message.answer(
+            f"🎉 **Добро пожаловать!** Вы подписаны на наш основной канал.\n\n"
+            f"Выберите, куда вы хотите перейти:",
+            reply_markup=SUBSCRIBED_KEYBOARD 
+        )
             
     else:
         # Если не подписан - ПРИНУДИТЕЛЬНО ИСПОЛЬЗУЕМ FALLBACK_CHANNEL_LINK
-        invite_link = FALLBACK_CHANNEL_LINK # <--- Принудительная ссылка
-        
-        # БЛОК ДЛЯ ПОЛУЧЕНИЯ АКТУАЛЬНОЙ ССЫЛКИ УДАЛЕН ИЛИ ЗАКОММЕНТИРОВАН!
+        invite_link = FALLBACK_CHANNEL_LINK 
         
         await message.answer(
             f"✋ **Доступ ограничен.**\n\n"
@@ -111,21 +94,13 @@ async def process_callback_check(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id, text="Проверяю подписку...", show_alert=False)
     
     if await is_subscribed(user_id):
-        # Если проверка успешна - ПЕРЕСЫЛАЕМ СООБЩЕНИЕ С ЭМОДЗИ
-        try:
-            await bot.forward_message(
-                chat_id=user_id,
-                from_chat_id=SOURCE_CHAT_ID,
-                message_id=SUCCESS_MESSAGE_ID
-            )
-        except Exception as e:
-            logging.error(f"Failed to forward message on callback: {e}")
-            await bot.send_message(
-                user_id,
-                "✅ **Доступ открыт!** Но не удалось переслать сообщение с эмодзи. "
-                "Пожалуйста, используйте кнопки ниже:",
-                reply_markup=SUBSCRIBED_KEYBOARD 
-            )
+        # Если проверка успешна - отправляем сообщение с двумя стандартными кнопками
+        await bot.send_message(
+            user_id,
+            f"✅ **Отлично!** Подписка подтверждена.\n\n"
+            f"Выберите, куда вы хотите перейти:",
+            reply_markup=SUBSCRIBED_KEYBOARD 
+        )
 
         # Редактируем сообщение с кнопкой проверки, чтобы убрать ее
         await bot.edit_message_text(
@@ -144,4 +119,3 @@ async def process_callback_check(callback_query: types.CallbackQuery):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
-
