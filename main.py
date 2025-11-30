@@ -15,7 +15,10 @@ CHANNEL_ID = -1003422300617
 MANUAL_CHANNEL_LINK = "https://t.me/+A0NALNA1tltjYjIy" 
 
 # Ссылка на основной канал (ЭТА ССЫЛКА БУДЕТ ИСПОЛЬЗОВАТЬСЯ ПРИНУДИТЕЛЬНО!)
-FALLBACK_CHANNEL_LINK = "https://t.me/+UCv7qEQLX-wxZDE6"
+FALLBACK_CHANNEL_LINK = "https://t.me/+UCv7qEQLX-wxZDE6i"
+
+# ID фото, которое будет отправляться в начале. (ВЗЯТО ИЗ ВАШЕГО JSON)
+PHOTO_FILE_ID = "AgACAgIAAxkBAAE-j_ZpK81Rtgm5SohtE1bMtI0XB_YHKQACCAtrG-zcYEn1PjRKletkuwEAAwIAA3kAAzYE" 
 # ----------------------------------------------------------------------
 
 # Настройка логирования
@@ -34,7 +37,7 @@ CHECK_BUTTON = types.InlineKeyboardMarkup().add(
     types.InlineKeyboardButton(text="✅ Я подписался, проверить доступ", callback_data="check_subscription")
 )
 
-# Клавиатура для ПОДПИСАННОГО пользователя (Две кнопки со стандартными эмодзи)
+# Клавиатура для ПОДПИСАННОГО пользователя
 SUBSCRIBED_KEYBOARD = types.InlineKeyboardMarkup(row_width=1)
 SUBSCRIBED_KEYBOARD.add(
     types.InlineKeyboardButton(text="🚀 Перейти к мануалам", url=MANUAL_CHANNEL_LINK)
@@ -62,19 +65,28 @@ async def is_subscribed(user_id):
 
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
-    """Обрабатывает команду /start, отправляя независимое сообщение (answer)."""
+    """Обрабатывает команду /start: сначала отправляет фото, затем текст с кнопками."""
     user_id = message.from_user.id
     
+    # 1. Отправляем фото
+    try:
+        await bot.send_photo(
+            chat_id=user_id,
+            photo=PHOTO_FILE_ID,
+            caption="**САМЫЙ ЛУЧШИЙ ГАЙД НА OFM МОДЕЛИ**" # Подпись под фото
+        )
+    except Exception as e:
+        logging.error(f"Не удалось отправить фото {PHOTO_FILE_ID} пользователю {user_id}: {e}")
+        # Если фото не отправилось, продолжаем без него.
+        
+    # 2. Затем отправляем текст с кнопками (как обычно)
     if await is_subscribed(user_id):
-        # Если подписан - отправляем сообщение с двумя стандартными кнопками
         await message.answer(
             f"🎉 **Добро пожаловать!** Вы подписаны на наш основной канал.\n\n"
             f"Выберите, куда вы хотите перейти:",
             reply_markup=SUBSCRIBED_KEYBOARD 
         )
-            
     else:
-        # Если не подписан - ПРИНУДИТЕЛЬНО ИСПОЛЬЗУЕМ FALLBACK_CHANNEL_LINK
         invite_link = FALLBACK_CHANNEL_LINK 
         
         await message.answer(
@@ -94,7 +106,6 @@ async def process_callback_check(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id, text="Проверяю подписку...", show_alert=False)
     
     if await is_subscribed(user_id):
-        # Если проверка успешна - отправляем сообщение с двумя стандартными кнопками
         await bot.send_message(
             user_id,
             f"✅ **Отлично!** Подписка подтверждена.\n\n"
@@ -102,14 +113,12 @@ async def process_callback_check(callback_query: types.CallbackQuery):
             reply_markup=SUBSCRIBED_KEYBOARD 
         )
 
-        # Редактируем сообщение с кнопкой проверки, чтобы убрать ее
         await bot.edit_message_text(
             "✅ Доступ открыт! Нажмите /start, если потеряли ссылки.",
             callback_query.from_user.id,
             callback_query.message.message_id
         )
     else:
-        # Если подписка не найдена
         await bot.send_message(
             user_id, 
             "❌ Подписка не найдена. Убедитесь, что вы **подписаны** на основной канал и попробуйте снова."
@@ -119,4 +128,3 @@ async def process_callback_check(callback_query: types.CallbackQuery):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
-
