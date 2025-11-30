@@ -15,11 +15,9 @@ CHANNEL_ID = -1003422300617
 MANUAL_CHANNEL_LINK = "https://t.me/+A0NALNA1tltjYjIy" 
 
 # Ссылка на основной канал (ЭТА ССЫЛКА БУДЕТ ИСПОЛЬЗОВАТЬСЯ ПРИНУДИТЕЛЬНО!)
-FALLBACK_CHANNEL_LINK = "https://t.me/+UCv7qEQLX-wxZDE6" # <--- ОБНОВЛЕНА
-# ----------------------------------------------------------------------
+FALLBACK_CHANNEL_LINK = "https://t.me/+UCv7qEQLX-wxZDE6" 
 
 # ID фото, которое будет отправляться в начале. (ВЗЯТО ИЗ ВАШЕГО НОВОГО JSON)
-# Если возникнут ошибки, вам потребуется получить новый file_id, отправив фото напрямую боту.
 PHOTO_FILE_ID = "AgACAgIAAxkBAAE-j_ZpK81Rtgm5SohtE1bMtI0XB_YHKQACCAtrG-zcYEn1PjRKletkuwEAAwIAA3kAAzYE" 
 # ----------------------------------------------------------------------
 
