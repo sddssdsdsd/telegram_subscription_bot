@@ -15,7 +15,7 @@ CHANNEL_ID = -1003422300617
 MANUAL_CHANNEL_LINK = "https://t.me/+A0NALNA1tltjYjIy" 
 
 # Ссылка на основной канал (используется как запасная и для кнопки)
-FALLBACK_CHANNEL_LINK = "https://t.me/+Ycncv5PGWvxjNmZi"
+FALLBACK_CHANNEL_LINK = "https://t.me/+UCv7qEQLX-wxZDE6i"
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
@@ -125,3 +125,4 @@ async def process_callback_check(callback_query: types.CallbackQuery):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
+
