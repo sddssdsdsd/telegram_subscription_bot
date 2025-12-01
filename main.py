@@ -84,7 +84,7 @@ SUBSCRIBED_KEYBOARD.add(
 # 4. Клавиатура для ПОКУПКИ (Подробное описание тарифа)
 PURCHASE_KEYBOARD = types.InlineKeyboardMarkup(row_width=1)
 PURCHASE_KEYBOARD.add(
-    types.InlineKeyboardButton(text="🔥 КУПИТЬ ДОСТУП / НАПИСАТЬ АНТОНУ", url=CONTACT_LINK)
+    types.InlineKeyboardButton(text="🔥 КУПИТЬ ДОСТУП", url=CONTACT_LINK)
 )
 PURCHASE_KEYBOARD.add(
     types.InlineKeyboardButton(text="⬅️ Назад к меню", callback_data="back_to_menu")
@@ -202,7 +202,7 @@ async def process_show_tariff(callback_query: types.CallbackQuery):
         "--- ПРИВАТНОЕ КОМЬЮНИТИ ---\n\n"
         f"{desc}\n\n"
         "--- ВАЖНО ---\n"
-        "Покупка проходит только через личные сообщения. Проверьте юзернейм перед оплатой:"
+        "Покупка проходит только через личные сообщения. Проверьте юзернейм перед оплатой @antoha666s"
     )
 
     # Редактируем текущее сообщение, чтобы показать полное описание и кнопки покупки/назад
@@ -239,3 +239,4 @@ async def process_callback_check(callback_query: types.CallbackQuery):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
+
